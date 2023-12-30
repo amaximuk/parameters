@@ -1,9 +1,10 @@
 /3rdparty/
 /bin
 /bin_*/
+/build/
 /build_*/
-/mklink.bat
-/pull and update.bat
+/install/
+/install_*/
 /lib
 /.local
 /windows_x32*/
