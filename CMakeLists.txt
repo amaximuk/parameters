@@ -13,6 +13,7 @@ set_property(CACHE PACKAGE_MANAGER PROPERTY STRINGS NONE CONAN 3RDPARTY)
 if("${PACKAGE_MANAGER}" STREQUAL "CONAN")
 	#include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 	#conan_basic_setup()
+
 	set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 	set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
@@ -31,7 +32,7 @@ include(GNUInstallDirs)
 
 # начальное создание файла git_commit_hash.h, чтобы добавить его в проект
 execute_process(
-	COMMAND ${CMAKE_COMMAND} -DCOMPILE_PARAMETERS_OUT=${CMAKE_CURRENT_BINARY_DIR}/git_commit_hash.h -DCOMPILE_PARAMETERS_IN=${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.h.in -P ${CMAKE_SOURCE_DIR}/cmake/git_commit_hash.cmake
+	COMMAND ${CMAKE_COMMAND} -DCOMPILE_PARAMETERS_OUT=${CMAKE_CURRENT_BINARY_DIR}/git_commit_hash.h -DCOMPILE_PARAMETERS_IN=${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.h.in -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.cmake
 	WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 
 # заполняем список конфигурационных файлов
@@ -66,7 +67,7 @@ endif()
 # добавляем триггер на создание файла git_commit_hash.h при перекомпиляции
 add_custom_command(
 	TARGET ${PROJECT_NAME} PRE_BUILD
-	COMMAND ${CMAKE_COMMAND} -DCOMPILE_PARAMETERS_OUT=${CMAKE_CURRENT_BINARY_DIR}/git_commit_hash.h -DCOMPILE_PARAMETERS_IN=${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.h.in -P ${CMAKE_SOURCE_DIR}/cmake/git_commit_hash.cmake
+	COMMAND ${CMAKE_COMMAND} -DCOMPILE_PARAMETERS_OUT=${CMAKE_CURRENT_BINARY_DIR}/git_commit_hash.h -DCOMPILE_PARAMETERS_IN=${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.h.in -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/git_commit_hash.cmake
 	WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 
 install(TARGETS ${PROJECT_NAME}
