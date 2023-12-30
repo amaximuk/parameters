@@ -1,0 +1,7 @@
+[requires]
+yaml-cpp/0.7.0
+jsoncpp/1.8.3
+gtest/1.8.1
+
+[generators]
+cmake_find_package_multi
