@@ -1,0 +1,96 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin-top: 10px;
+  margin-bottom: 60px;
+  margin-left: 60px;
+  margin-right: 50px;
+}
+
+.content {
+  border: 1px solid #a2a9b1;
+  background-color: #f8f9fa;
+  display: table;
+  padding: 0px 20px 0px 0px;
+}
+
+.content_index {
+  border: 1px solid #a2a9b1;
+  background-color: #f8f9fa;
+  padding: 0px 10px 0px 10px;
+  margin: 0px 0px 4px 0px;
+}
+
+.content h2 {
+  font-family: 'Linux Libertine','Georgia','Times',serif;
+  border-bottom: 0px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.content li {
+  font-size: 0.9rem;
+}
+
+ol p {
+  font-size: 0.9rem;
+}
+
+pc-variables {
+  display: none;
+}
+
+h1,h2 {
+  font-family: 'Linux Libertine','Georgia','Times',serif;
+  font-weight: normal;
+  border-bottom: 1px solid rgb(160,160,160);
+}
+
+table {
+  border-collapse: collapse;
+  border: 2px solid rgb(200,200,200);
+  /* letter-spacing: 1px; */
+  font-size: 0.9rem;
+  /* min-width: 100%; */
+}
+
+td, th {
+  border: 1px solid rgb(190,190,190);
+  padding: 10px 20px;
+}
+
+th {
+  background-color: rgb(235,235,235);
+}
+
+td {
+  text-align: left;
+}
+
+tr:nth-child(even) td {
+  background-color: rgb(250,250,250);
+}
+
+tr:nth-child(odd) td {
+  background-color: rgb(245,245,245);
+}
+
+caption {
+  padding: 10px;
+}
+
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: StackOverflow Light
+  Description: Light theme as used on stackoverflow.com
+  Author: stackoverflow.com
+  Maintainer: @Hirse
+  Website: https://github.com/StackExchange/Stacks
+  License: MIT
+  Updated: 2021-05-15
+
+  Updated for @stackoverflow/stacks v0.64.0
+  Code Blocks: /blob/v0.64.0/lib/css/components/_stacks-code-blocks.less
+  Colors: /blob/v0.64.0/lib/css/exports/_stacks-constants-colors.less
+*/.hljs{color:#2f3337;background:#f6f6f6}.hljs-subst{color:#2f3337}.hljs-comment{color:#656e77}.hljs-attr,.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-section,.hljs-selector-tag{color:#015692}.hljs-attribute{color:#803378}.hljs-name,.hljs-number,.hljs-quote,.hljs-selector-id,.hljs-template-tag,.hljs-type{color:#b75501}.hljs-selector-class{color:#015692}.hljs-link,.hljs-regexp,.hljs-selector-attr,.hljs-string,.hljs-symbol,.hljs-template-variable,.hljs-variable{color:#54790d}.hljs-meta,.hljs-selector-pseudo{color:#015692}.hljs-built_in,.hljs-literal,.hljs-title{color:#b75501}.hljs-bullet,.hljs-code{color:#535a60}.hljs-meta .hljs-string{color:#54790d}.hljs-deletion{color:#c02d2e}.hljs-addition{color:#2f6f44}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}

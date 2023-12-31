@@ -1,0 +1,102 @@
+INFO:
+  ID: configurator
+  DISPLAY_NAME: Конфигуратор
+  DESCRIPTION: Конфигуратор
+  CATEGORY: Configurators
+  HINT: Configurator
+  PICTOGRAM: MIME
+  AUTHOR: Иванов А.М.
+  WIKI: http://wiki.ru/index.php/Configurator
+TYPES:
+  - NAME: drv_api::SW
+    TYPE: enum
+    DESCRIPTION: |
+      Перечисление конфигураций переключателей
+    VALUES:
+      SC_A_B_MHZ: drv_api::SW::SC_A_B_MHZ
+      SC_B_C_MHZ: drv_api::SW::SC_B_C_MHZ
+      SC_C_D_MHZ: drv_api::SW::SC_C_D_MHZ
+    INCLUDES: [include/drivers/drv_api.h]
+  - NAME: CHANNEL
+    DESCRIPTION: Параметры канала обработки
+    PARAMETERS:
+      - NAME: RECEIVER_NAME
+        TYPE: unit
+        DISPLAY_NAME: Имя приемника
+        DESCRIPTION: Имя юнита модели приемника
+        HINT: Rpu CAN Receiver
+        RESTRICTIONS:
+          CATEGORY: Models
+          IDS: [rpu_can]
+      - NAME: SWITCHERS_CONFIGURATION
+        TYPE: drv_api::SW
+        DISPLAY_NAME: Конфигурация переключателей
+        DESCRIPTION: Выбор конфигурации переключателей
+        HINT: SC_A_B_MHZ
+        RESTRICTIONS:
+          SET: [SC_A_B_MHZ]
+      - NAME: SWITCHER_STATES
+        TYPE: array<drv_api::SW>
+        DISPLAY_NAME: Переключатели
+        DESCRIPTION: Переключатели чего-нибудь
+        HINT: SC_C_D_MHZ
+        RESTRICTIONS:
+          MIN_COUNT: 1
+      - NAME: BLOCKING_STATES
+        TYPE: array<uint8_t>
+        DISPLAY_NAME: Блокировки
+        DESCRIPTION: Блокировки чего-нибудь
+        RESTRICTIONS:
+          MIN: 0
+          MAX: 1000
+          SET_COUNT: [3, 4, 7]
+      - NAME: STRING_PARAMETER
+        TYPE: string
+        DISPLAY_NAME: Строка
+        DESCRIPTION: Тестовый строковый параметр
+        REQUIRED: false
+        RESTRICTIONS:
+          SET: [rpu_can, Русский текст]
+PARAMETERS:
+  - NAME: DRIVER_NAME
+    TYPE: unit
+    DISPLAY_NAME: Имя драйвера
+    DESCRIPTION: Имя юнита драйвера
+    HINT: Driver
+    RESTRICTIONS:
+      CATEGORY: Drivers
+      IDS: [driver]
+  - NAME: FIRMWARE_PATH
+    TYPE: path
+    DISPLAY_NAME: Прошивка
+    DESCRIPTION: Относительный путь к прошивке
+    HINT: "./firmware/fpga/conv.bit"
+    RESTRICTIONS:
+      MAX_LENGTH: 160
+  - NAME: MAX_CONTINUOUS_BANDWIDTH_MHZ
+    TYPE: double
+    DISPLAY_NAME: Максимальная полоса
+    DESCRIPTION: Максимальная полоса сигнала, МГц
+    REQUIRED: false
+    DEFAULT: 0
+    RESTRICTIONS:
+      MIN: 0
+      MAX: 256
+  - NAME: FPGA_USE_ADDITIONAL_FILTER
+    TYPE: bool
+    DISPLAY_NAME: Использовать дополнительный фильтр
+    DESCRIPTION: Использовать дополнительный фильтр
+    REQUIRED: false
+    DEFAULT: true
+  - NAME: OVERRIDED_BANDWIDTH_MHZ
+    TYPE: float
+    DISPLAY_NAME: Переопредельть полосу
+    DESCRIPTION: Переопредельть полосу сигнала, если параметр задан
+    REQUIRED: false
+  - NAME: CHANNELS
+    TYPE: array<CHANNEL>
+    DISPLAY_NAME: Каналы
+    DESCRIPTION: Каналы обработки
+    REQUIRED: True
+    RESTRICTIONS:
+      SET_COUNT: [4]
