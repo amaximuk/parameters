@@ -10,6 +10,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(PACKAGE_MANAGER "NONE" CACHE STRING "Type of package manager to be used for configure project")
 set_property(CACHE PACKAGE_MANAGER PROPERTY STRINGS NONE CONAN 3RDPARTY)
 
+option(BUILD_PARAMETERS_COMPILER OFF)
+
 if("${PACKAGE_MANAGER}" STREQUAL "CONAN")
 	#include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 	#conan_basic_setup()
@@ -100,7 +102,9 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/ DESTINATION ${CMAKE_INSTALL_INCLUDE
 # install(FILES ${PROJECT_SOURCE_DIR}/src/parameters.h
 		# DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-add_subdirectory(parameters_compiler)
+if(BUILD_PARAMETERS_COMPILER)
+	add_subdirectory(parameters_compiler)
+endif()
 
 # добавляем тесты
 if(BUILD_TESTS)
