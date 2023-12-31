@@ -169,7 +169,7 @@ bool writer::write_parameter_info(YAML::Emitter& emitter, const yaml::parameter_
     if (pi.required != "true")
     {
         emitter << YAML::Key << "REQUIRED";
-        emitter << YAML::Value << YAML::TrueFalseBool << pi.required;
+        emitter << YAML::Value << pi.required;
     }
     if (pi.default_ != "")
     {
