@@ -4,6 +4,7 @@
 #include <chrono>
 #include <regex>
 #include "git_commit_hash.h"
+#include "string_helper.h"
 #include "yaml_parser.h"
 
 using namespace yaml;
@@ -95,6 +96,8 @@ bool parser::get_info_info(const YAML::Node& node, info_info& ui)
 		ui.display_name = ui.id;
 	if (!try_get_yaml_value<std::string>(node, "DESCRIPTION", ui.description))
 		ui.description = ui.display_name;
+	// Remove trailing newlines, yamlcpp adds \n after multiline string
+	string_helper::rtrim(ui.description, '\n');
 	if (!try_get_yaml_value<std::string>(node, "CATEGORY", ui.category))
 		ui.category = "No category";
 	if (!try_get_yaml_value<std::string>(node, "HINT", ui.hint))
@@ -120,6 +123,8 @@ bool parser::get_type_info(const YAML::Node& node, const std::vector<type_info>&
 		ti.type = "yml";
 	if (!try_get_yaml_value<std::string>(node, "DESCRIPTION", ti.description))
 		ti.description = ti.name;
+	// Remove trailing newlines, yamlcpp adds \n after multiline string
+	string_helper::rtrim(ti.description, '\n');
 
 	//// Evaluated members
 	//ti.category = ti.type == "yml" ? type_category::user_yml : type_category::user_cpp;
@@ -176,6 +181,8 @@ bool parser::get_parameter_info(const YAML::Node& node, const std::vector<type_i
 		pi.display_name = pi.name;
 	if (!try_get_yaml_value<std::string>(node, "DESCRIPTION", pi.description))
 		pi.description = pi.display_name;
+	// Remove trailing newlines, yamlcpp adds \n after multiline string
+	string_helper::rtrim(pi.description, '\n');
 	if (!try_get_yaml_value<std::string>(node, "HINT", pi.hint))
 		pi.hint = "";
 
