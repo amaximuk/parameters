@@ -6,12 +6,14 @@
 #include <regex>
 #include "git_commit_hash.h"
 #include "string_helper.h"
-#include "yaml_helper.h"
-#include "yaml_xml_formatter.h"
-#include "yaml_wiki_formatter.h"
+#include "parameters/helper_common.h"
+#include "parameters/helper_type.h"
+#include "parameters/helper_parameter.h"
+#include "parameters/formatter_xml.h"
+#include "parameters/formatter_wiki.h"
 
-using namespace yaml;
-using namespace yaml::helper;
+using namespace parameters;
+using namespace parameters::formatter;
 
 #define ELRF(message) do { if (!is_batch_) std::cout << message << std::endl; return false; } while(0)
 
@@ -37,7 +39,7 @@ bool wiki_formatter::format(const file_info& file_info, std::list<std::string>& 
 bool wiki_formatter::get_file_wiki(const file_info& fi, std::list<std::string>& wiki)
 {
 	wiki.push_back("== Назначение ==");
-	wiki.push_back(string_helper::make_string(common::get_description_as_cp1251(fi.info.description, common::description_type::wiki), "<br>"));
+	wiki.push_back(string_helper::make_string(helper::common::get_description_as_cp1251(fi.info.description, helper::common::description_type::wiki), "<br>"));
 	wiki.push_back("");
 
 	for (const auto& ti : file_info_.types)
@@ -60,7 +62,7 @@ bool wiki_formatter::get_file_wiki(const file_info& fi, std::list<std::string>& 
 	wiki.push_back("== Пример конфигурационного файла ==");
 	wiki.push_back(string_helper::make_string("<syntaxhighlight lang=\"xml\">"));
 
-	xml_formatter formatter(is_batch_);
+	formatter::xml_formatter formatter(is_batch_);
 	std::list<std::string> xml;
 	if (!formatter.format(fi, xml))
 		ELRF("Get file xml failed");
@@ -74,13 +76,13 @@ bool wiki_formatter::get_file_wiki(const file_info& fi, std::list<std::string>& 
 	wiki.push_back("");
 
 	wiki.push_back("== Автор ==");
-	wiki.push_back(common::get_as_cp1251(file_info_.info.author));
+	wiki.push_back(helper::common::get_as_cp1251(file_info_.info.author));
 	wiki.push_back("");
 
 	if (file_info_.info.wiki != "")
 	{
 		wiki.push_back("== Ссылки ==");
-		wiki.push_back(string_helper::make_string("Описание на wiki: ", common::get_as_cp1251(file_info_.info.wiki)));
+		wiki.push_back(string_helper::make_string("Описание на wiki: ", helper::common::get_as_cp1251(file_info_.info.wiki)));
 	}
 
 	return true;
@@ -88,8 +90,8 @@ bool wiki_formatter::get_file_wiki(const file_info& fi, std::list<std::string>& 
 
 bool wiki_formatter::get_type_wiki(const type_info& ti, std::list<std::string>& wiki)
 {
-	wiki.push_back(string_helper::make_string("== Тип ", common::get_as_cp1251(ti.name), " =="));
-	if (type::get_category(ti) == type_category::user_yml)
+	wiki.push_back(string_helper::make_string("== Тип ", helper::common::get_as_cp1251(ti.name), " =="));
+	if (helper::type::get_category(ti) == type_category::user_yml)
 	{
 		wiki.push_back(string_helper::make_string("{| class=\"wikitable\""));
 		wiki.push_back(string_helper::make_string("|-"));
@@ -108,15 +110,15 @@ bool wiki_formatter::get_type_wiki(const type_info& ti, std::list<std::string>& 
 
 		wiki.push_back(string_helper::make_string("|}"));
 	}
-	else if (type::get_category(ti) == type_category::user_cpp)
+	else if (helper::type::get_category(ti) == type_category::user_cpp)
 	{
 		wiki.push_back(string_helper::make_string("<p>"));
-		wiki.push_back(common::get_description_as_cp1251(ti.description, common::description_type::wiki));
+		wiki.push_back(helper::common::get_description_as_cp1251(ti.description, helper::common::description_type::wiki));
 		wiki.push_back(string_helper::make_string("</p>"));
 
 		wiki.push_back(string_helper::make_string("<p>Данный тип определен в исходных файлах проекта. ",
 			"Значения из конфигурационного файла будут считаны как тип <b><i>",
-			type::get_type_xml(ti), "</i></b> и приведены к типу <b><i>", common::get_as_cp1251(ti.name), "</i></b></p>"));
+			helper::type::get_type_xml(ti), "</i></b> и приведены к типу <b><i>", helper::common::get_as_cp1251(ti.name), "</i></b></p>"));
 
 		if (ti.type == "enum")
 		{
@@ -124,7 +126,7 @@ bool wiki_formatter::get_type_wiki(const type_info& ti, std::list<std::string>& 
 			{
 				wiki.push_back(string_helper::make_string("<p>Тип использует следующие заголовочные файлы:</p>"));
 				for (const auto& i : ti.includes)
-					wiki.push_back(string_helper::make_string("* ", common::get_as_cp1251(i)));
+					wiki.push_back(string_helper::make_string("* ", helper::common::get_as_cp1251(i)));
 			}
 
 			wiki.push_back(string_helper::make_string("<p>В перечислении для использования в xml определены следующие значения:</p>"));
@@ -135,7 +137,7 @@ bool wiki_formatter::get_type_wiki(const type_info& ti, std::list<std::string>& 
 			for (const auto& v : ti.values)
 			{
 				wiki.push_back(string_helper::make_string("|-"));
-				wiki.push_back(string_helper::make_string("| ", common::get_as_cp1251(v.first), " || ", common::get_as_cp1251(v.second)));
+				wiki.push_back(string_helper::make_string("| ", helper::common::get_as_cp1251(v.first), " || ", helper::common::get_as_cp1251(v.second)));
 			}
 
 			wiki.push_back(string_helper::make_string("|}"));
@@ -173,9 +175,9 @@ bool wiki_formatter::get_parameter_wiki(const parameter_info& pi, std::list<std:
 		ELRF("Get restrictions failed");
 
 	wiki.push_back(string_helper::make_string("|-"));
-	wiki.push_back(string_helper::make_string("| ", common::get_as_cp1251(pi.name), " || ", common::get_description_as_cp1251(pi.description, common::description_type::wiki), " || ",
+	wiki.push_back(string_helper::make_string("| ", helper::common::get_as_cp1251(pi.name), " || ", helper::common::get_description_as_cp1251(pi.description, helper::common::description_type::wiki), " || ",
 		get_is_required_wiki(pi), " || ", get_type_wiki(pi), " || ", get_type_xml_wiki(pi), " || ",
-		common::get_as_cp1251(pi.default_), " || ", common::get_as_cp1251(pi.hint), " || ", restrictions_wiki));
+		helper::common::get_as_cp1251(pi.default_), " || ", helper::common::get_as_cp1251(pi.hint), " || ", restrictions_wiki));
 
 	return true;
 }
@@ -183,20 +185,20 @@ bool wiki_formatter::get_parameter_wiki(const parameter_info& pi, std::list<std:
 
 bool wiki_formatter::get_restrictions_wiki(const parameter_info& pi, std::string& wiki)
 {
-	if (parameter::get_has_restrictions(pi))
+	if (helper::parameter::get_has_restrictions(pi))
 	{
-		if (parameter::get_is_array(pi))
+		if (helper::parameter::get_is_array(pi))
 		{
 			if (pi.restrictions.min_count != "")
-				wiki += string_helper::make_string("Минимальное количество элементов: ", common::get_as_cp1251(pi.restrictions.min_count), "<br>");
+				wiki += string_helper::make_string("Минимальное количество элементов: ", helper::common::get_as_cp1251(pi.restrictions.min_count), "<br>");
 			if (pi.restrictions.max_count != "")
-				wiki += string_helper::make_string("Максимальное количество элементов: ", common::get_as_cp1251(pi.restrictions.max_count), "<br>");
+				wiki += string_helper::make_string("Максимальное количество элементов: ", helper::common::get_as_cp1251(pi.restrictions.max_count), "<br>");
 			if (pi.restrictions.set_count.size() > 0)
 			{
 				wiki += string_helper::make_string("Допустимое количество элементов: ");
 				for (int i = 0; i < pi.restrictions.set_count.size(); i++)
 				{
-					std::string value_str = string_helper::make_string(common::get_as_cp1251(pi.restrictions.set_count[i]));
+					std::string value_str = string_helper::make_string(helper::common::get_as_cp1251(pi.restrictions.set_count[i]));
 					if (value_str.length() > 10)
 						wiki += "<br>";
 					wiki += value_str;
@@ -209,15 +211,15 @@ bool wiki_formatter::get_restrictions_wiki(const parameter_info& pi, std::string
 		else
 		{
 			if (pi.restrictions.min != "")
-				wiki += string_helper::make_string("Минимальное значение: ", common::get_as_cp1251(pi.restrictions.min), "<br>");
+				wiki += string_helper::make_string("Минимальное значение: ", helper::common::get_as_cp1251(pi.restrictions.min), "<br>");
 			if (pi.restrictions.max != "")
-				wiki += string_helper::make_string("Максимальное значение: ", common::get_as_cp1251(pi.restrictions.max), "<br>");
+				wiki += string_helper::make_string("Максимальное значение: ", helper::common::get_as_cp1251(pi.restrictions.max), "<br>");
 			if (pi.restrictions.set_.size() > 0)
 			{
 				wiki += "Допустимые значения: ";
 				for (int i = 0; i < pi.restrictions.set_.size(); i++)
 				{
-					std::string value_str = string_helper::make_string(common::get_as_cp1251(pi.restrictions.set_[i]));
+					std::string value_str = string_helper::make_string(helper::common::get_as_cp1251(pi.restrictions.set_[i]));
 					if (value_str.length() > 10)
 						wiki += "<br>";
 					wiki += value_str;
@@ -228,17 +230,17 @@ bool wiki_formatter::get_restrictions_wiki(const parameter_info& pi, std::string
 			}
 
 			if ((pi.type == "path" || pi.type == "library") && !pi.restrictions.max_length.empty())
-				wiki += string_helper::make_string("Максимальная длина: ", common::get_as_cp1251(pi.restrictions.max_length), "<br>");
+				wiki += string_helper::make_string("Максимальная длина: ", helper::common::get_as_cp1251(pi.restrictions.max_length), "<br>");
 
 			if (pi.type == "unit" && !pi.restrictions.category.empty())
-				wiki += string_helper::make_string("Допустимые категории: ", common::get_as_cp1251(pi.restrictions.category), "<br>");
+				wiki += string_helper::make_string("Допустимые категории: ", helper::common::get_as_cp1251(pi.restrictions.category), "<br>");
 
 			if (pi.type == "unit" && pi.restrictions.ids.size() > 0)
 			{
 				wiki += "Допустимые юниты: ";
 				for (int i = 0; i < pi.restrictions.ids.size(); i++)
 				{
-					std::string value_str = common::get_as_cp1251(pi.restrictions.ids[i]);
+					std::string value_str = helper::common::get_as_cp1251(pi.restrictions.ids[i]);
 					if (value_str.length() > 10)
 						wiki += "<br>";
 					wiki += value_str;
@@ -254,12 +256,12 @@ bool wiki_formatter::get_restrictions_wiki(const parameter_info& pi, std::string
 
 std::string wiki_formatter::get_is_required_wiki(const parameter_info& pi) const
 {
-	return parameter::get_is_required(pi) ? "да" : "нет";
+	return helper::parameter::get_is_required(pi) ? "да" : "нет";
 }
 
 std::string wiki_formatter::get_type_wiki(const parameter_info& pi) const
 {
-	std::string type_xml_html = common::get_as_cp1251(pi.type);
+	std::string type_xml_html = helper::common::get_as_cp1251(pi.type);
 	type_xml_html = std::regex_replace(type_xml_html, std::regex("<"), "&lt;");
 	type_xml_html = std::regex_replace(type_xml_html, std::regex(">"), "&gt;");
 	return type_xml_html;
@@ -267,7 +269,7 @@ std::string wiki_formatter::get_type_wiki(const parameter_info& pi) const
 
 std::string wiki_formatter::get_type_xml_wiki(const parameter_info& pi) const
 {
-	std::string type_xml_html = parameter::get_type_xml(file_info_, pi);
+	std::string type_xml_html = helper::parameter::get_type_xml(file_info_, pi);
 	type_xml_html = std::regex_replace(type_xml_html, std::regex("<"), "&lt;");
 	type_xml_html = std::regex_replace(type_xml_html, std::regex(">"), "&gt;");
 	return type_xml_html;

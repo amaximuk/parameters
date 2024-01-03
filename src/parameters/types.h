@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <map>
 
-namespace yaml
+namespace parameters
 {
 	enum class struct_types
 	{
@@ -98,5 +98,85 @@ namespace yaml
 		info_info info;
 		std::vector<type_info> types;
 		std::vector<parameter_info> parameters;
+	};
+
+	// Замена QVariant
+	class variant
+	{
+	private:
+		base_types t_;
+		std::string s_;
+		int i_;
+		double d_;
+		bool b_;
+
+	public:
+		variant() :
+			t_(base_types::none),
+			s_(""),
+			i_(0),
+			d_(0.0),
+			b_(false)
+		{}
+
+		explicit variant(std::string s) :
+			variant()
+		{
+			t_ = base_types::string;
+			s_ = s;
+		}
+
+		explicit variant(int i) :
+			variant()
+		{
+			t_ = base_types::integer;
+			i_ = i;
+		}
+
+		explicit variant(double d) :
+			variant()
+		{
+			t_ = base_types::floating;
+			d_ = d;
+		}
+
+		explicit variant(bool b) :
+			variant()
+		{
+			t_ = base_types::bool_;
+			b_ = b;
+		}
+
+		base_types get_type() const
+		{
+			return t_;
+		}
+
+		template <typename T>
+		T get() const
+		{
+			switch (t_)
+			{
+			case parameters::base_types::string:
+				return {}; // specialization
+			case parameters::base_types::integer:
+				return static_cast<T>(i_);
+			case parameters::base_types::floating:
+				return static_cast<T>(d_);
+			case parameters::base_types::bool_:
+				return static_cast<T>(b_);
+			default:
+				return {};
+			}
+		}
+
+		template <>
+		std::string get<std::string>() const
+		{
+			if (t_ == parameters::base_types::string)
+				return s_;
+			else
+				return {};
+		}
 	};
 }

@@ -41,8 +41,8 @@ execute_process(
 set(GIT_COMMIT_HASH_FILES
 	${CMAKE_CURRENT_BINARY_DIR}/git_commit_hash.h)
 
-file(GLOB PROJECT_SOURCES src/*.cpp src/ext/*.cpp)
-file(GLOB PROJECT_HEADERS src/*.h src/ext/*.h)
+file(GLOB PROJECT_SOURCES src/*.cpp src/parameters/*.cpp)
+file(GLOB PROJECT_HEADERS src/*.h src/parameters/*.h)
 
 source_group("Source Files" FILES ${PROJECT_SOURCES})
 source_group("Header Files" FILES ${PROJECT_HEADERS})
@@ -97,10 +97,9 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION cmake)
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/parameters DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h")
-# install(FILES ${PROJECT_SOURCE_DIR}/src/parameters.h
-		# DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${PROJECT_SOURCE_DIR}/src/parameters.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(BUILD_PARAMETERS_COMPILER)
 	add_subdirectory(parameters_compiler)

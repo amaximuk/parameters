@@ -4,9 +4,9 @@
 #include <vector>
 #include <cstdint>
 #include <map>
-#include "yaml_types.h"
+#include "parameters/types.h"
 
-namespace yaml
+namespace parameters
 {
 	const std::map<std::string, std::string> type_to_xml_types = { {"yml", ""}, {"enum", "str"} };
 	const std::map<std::string, std::string> system_to_xml_types = { {"unit", "str"}, {"path", "str"}, {"string", "str"}, {"library", "lib"} };

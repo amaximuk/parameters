@@ -8,7 +8,8 @@
 #include "encoding_cp1251.h"
 #include "json_writer.h"
 
-using namespace json;
+using namespace parameters;
+using namespace parameters::json;
 
 inline std::string cp1251_to_utf8(std::string x)
 {
@@ -17,7 +18,7 @@ inline std::string cp1251_to_utf8(std::string x)
 // !!! remove -> last error???
 #define ELRF(message) do { std::cout << message << std::endl; return false; } while(0)
 
-bool writer::write(const std::string& filename, yaml::file_info& fi)
+bool writer::write(const std::string& filename, parameters::file_info& fi)
 {
     Json::Value mainObject;
 	if (!write_file_info(mainObject, fi))
@@ -43,7 +44,7 @@ bool writer::write(const std::string& filename, yaml::file_info& fi)
 	return true;
 }
 
-bool writer::write_file_info(Json::Value& emitter, const yaml::file_info& fi)
+bool writer::write_file_info(Json::Value& emitter, const parameters::file_info& fi)
 {
     write_info_info(emitter, fi.info);
     if (fi.types.size() > 0)
@@ -64,7 +65,7 @@ bool writer::write_file_info(Json::Value& emitter, const yaml::file_info& fi)
     return true;
 }
 
-bool writer::write_info_info(Json::Value& emitter, const yaml::info_info& ii)
+bool writer::write_info_info(Json::Value& emitter, const parameters::info_info& ii)
 {
     Json::Value info;
     info["ID"] = cp1251_to_utf8(ii.id);
@@ -87,7 +88,7 @@ bool writer::write_info_info(Json::Value& emitter, const yaml::info_info& ii)
     return true;
 }
 
-bool writer::write_type_info(Json::Value& emitter, const yaml::type_info& ti)
+bool writer::write_type_info(Json::Value& emitter, const parameters::type_info& ti)
 {
     Json::Value info;
     info["NAME"] = cp1251_to_utf8(ti.name);
@@ -121,7 +122,7 @@ bool writer::write_type_info(Json::Value& emitter, const yaml::type_info& ti)
     return true;
 }
 
-bool writer::write_parameter_info(Json::Value& emitter, const yaml::parameter_info& pi)
+bool writer::write_parameter_info(Json::Value& emitter, const parameters::parameter_info& pi)
 {
     Json::Value info;
     info["NAME"] = cp1251_to_utf8(pi.name);

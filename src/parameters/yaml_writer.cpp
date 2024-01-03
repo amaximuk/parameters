@@ -7,12 +7,13 @@
 //#include "git_commit_hash.h"
 #include "yaml_writer.h"
 
-using namespace yaml;
+using namespace parameters;
+using namespace parameters::yaml;
 
 // !!! remove -> last error???
 #define ELRF(message) do { std::cout << message << std::endl; return false; } while(0)
 
-bool writer::write(const std::string& filename, yaml::file_info& fi)
+bool writer::write(const std::string& filename, parameters::file_info& fi)
 {
 	YAML::Emitter emitter;
 
@@ -29,7 +30,7 @@ bool writer::write(const std::string& filename, yaml::file_info& fi)
 	return true;
 }
 
-bool writer::write_file_info(YAML::Emitter& emitter, const yaml::file_info& fi)
+bool writer::write_file_info(YAML::Emitter& emitter, const parameters::file_info& fi)
 {
     emitter << YAML::BeginMap;
     write_info_info(emitter, fi.info);
@@ -57,7 +58,7 @@ bool writer::write_file_info(YAML::Emitter& emitter, const yaml::file_info& fi)
     return true;
 }
 
-bool writer::write_info_info(YAML::Emitter& emitter, const yaml::info_info& ii)
+bool writer::write_info_info(YAML::Emitter& emitter, const parameters::info_info& ii)
 {
     emitter << YAML::Key << "INFO";
     emitter << YAML::Value << YAML::BeginMap;
@@ -105,7 +106,7 @@ bool writer::write_info_info(YAML::Emitter& emitter, const yaml::info_info& ii)
     return true;
 }
 
-bool writer::write_type_info(YAML::Emitter& emitter, const yaml::type_info& ti)
+bool writer::write_type_info(YAML::Emitter& emitter, const parameters::type_info& ti)
 {
     emitter << YAML::BeginMap;
     emitter << YAML::Key << "NAME";
@@ -149,7 +150,7 @@ bool writer::write_type_info(YAML::Emitter& emitter, const yaml::type_info& ti)
     return true;
 }
 
-bool writer::write_parameter_info(YAML::Emitter& emitter, const yaml::parameter_info& pi)
+bool writer::write_parameter_info(YAML::Emitter& emitter, const parameters::parameter_info& pi)
 {
     emitter << YAML::BeginMap;
     emitter << YAML::Key << "NAME";

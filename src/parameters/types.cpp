@@ -8,8 +8,8 @@
 #include <limits>
 #include "encoding_cp1251.h"
 #include "string_helper.h"
-#include "yaml_helper.h"
-#include "yaml_types.h"
+#include "parameters.h"
+#include "parameters/types.h"
 
 #undef min
 #undef max

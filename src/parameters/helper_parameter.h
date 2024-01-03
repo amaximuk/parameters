@@ -1,91 +1,11 @@
 #pragma once
 
-#include "yaml_types.h"
+#include "parameters/types.h"
 
-namespace yaml
+namespace parameters
 {
 	namespace helper
 	{
-        // Замена QVariant
-        class variant
-        {
-        private:
-            base_types t_;
-            std::string s_;
-            int i_;
-            double d_;
-            bool b_;
-
-        public:
-            variant() :
-                t_(base_types::none),
-                s_(""),
-                i_(0),
-                d_(0.0),
-                b_(false)
-            {}
-
-            explicit variant(std::string s) :
-                variant()
-            {
-                t_ = base_types::string;
-                s_ = s;
-            }
-
-            explicit variant(int i) :
-                variant()
-            {
-                t_ = base_types::integer;
-                i_ = i;
-            }
-
-            explicit variant(double d) :
-                variant()
-            {
-                t_ = base_types::floating;
-                d_ = d;
-            }
-
-            explicit variant(bool b):
-                variant()
-            {
-                t_ = base_types::bool_;
-                b_ = b;
-            }
-
-            base_types get_type() const
-            {
-                return t_;
-            }
-
-            template <typename T>
-            T get() const
-            {
-                switch (t_)
-                {
-                case yaml::base_types::string:
-                    return {}; // specialization
-                case yaml::base_types::integer:
-                    return static_cast<T>(i_);
-                case yaml::base_types::floating:
-                    return static_cast<T>(d_);
-                case yaml::base_types::bool_:
-                    return static_cast<T>(b_);
-                default:
-                    return {};
-                }
-            }
-
-            template <>
-            std::string get<std::string>() const
-            {
-                if (t_ == yaml::base_types::string)
-                    return s_;
-                else
-                    return {};
-            }
-        };
-
 		namespace parameter
 		{
 			// Получить категорию типа параметра pi

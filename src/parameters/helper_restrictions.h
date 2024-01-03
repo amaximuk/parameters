@@ -1,9 +1,8 @@
 #pragma once
 
-#include "yaml_types.h"
-#include "yaml_helper_common.h"
+#include "parameters/types.h"
 
-namespace yaml
+namespace parameters
 {
 	namespace helper
 	{

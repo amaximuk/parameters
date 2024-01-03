@@ -2,12 +2,12 @@
 
 #include "string_helper.h"
 #include "definitions.h"
-#include "yaml_types.h"
-#include "yaml_helper.h"
+#include "parameters/types.h"
+#include "parameters.h"
 
 //#define ELRF(message) do { if (!is_batch_) std::cout << message << std::endl; return false; } while(0)
 
-namespace yaml
+namespace parameters
 {
 	namespace helper
 	{

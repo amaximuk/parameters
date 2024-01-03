@@ -13,10 +13,10 @@
 #endif
 
 #include "../git_commit_hash.h"
-#include "yaml_code_formatter.h"
-#include "yaml_wiki_formatter.h"
-#include "yaml_html_formatter.h"
-#include "yaml_parser.h"
+#include "parameters/formatter_code.h"
+#include "parameters/formatter_wiki.h"
+#include "parameters/formatter_html.h"
+#include "parameters/yaml_parser.h"
 
 #define TL(message) do { if (!is_batch) std::cout << message << std::endl; } while(0)
 #define ELRF(message) do { if (!is_batch) std::cout << message << std::endl; return -1; } while(0)
@@ -89,8 +89,8 @@ int main(int argc, char** argv)
 	if (CmdOptionExists(argv, argv + argc, "-b"))
 		is_batch = true;
 
-	yaml::file_info file_info{};
-	if (!yaml::parser::parse(config_file_name, is_batch, file_info))
+	parameters::file_info file_info{};
+	if (!parameters::yaml::parser::parse(config_file_name, is_batch, file_info))
 		ELRF("File " << config_file_name << " parse failed");
 
 	TL("File " << config_file_name << " parsed successfully");
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 	if (output_header_file_name != "")
 	{
 		std::list<std::string> code;
-		if (!yaml::code_formatter::format(file_info, is_batch, code))
+		if (!parameters::formatter::code_formatter::format(file_info, is_batch, code))
 			ELRF("Get code failed " << config_file_name);
 
 		std::ofstream output_header_file(output_header_file_name);
@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 	if (output_wiki_file_name != "")
 	{
 		std::list<std::string> wiki;
-		if (!yaml::wiki_formatter::format(file_info, is_batch, wiki))
+		if (!parameters::formatter::wiki_formatter::format(file_info, is_batch, wiki))
 			ELRF("Get wiki failed " << config_file_name);
 
 		std::ofstream output_wiki_file(output_wiki_file_name);
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 	if (output_html_file_name != "")
 	{
 		std::list<std::string> html;
-		if (!yaml::html_formatter::format(file_info, is_batch, html))
+		if (!parameters::formatter::html_formatter::format(file_info, is_batch, html))
 			ELRF("Get html failed " << config_file_name);
 
 		std::ofstream output_html_file(output_html_file_name);

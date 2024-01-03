@@ -6,11 +6,13 @@
 #include <regex>
 #include "git_commit_hash.h"
 #include "string_helper.h"
-#include "yaml_helper.h"
-#include "yaml_xml_formatter.h"
+#include "parameters/helper_common.h"
+#include "parameters/helper_type.h"
+#include "parameters/helper_parameter.h"
+#include "parameters/formatter_xml.h"
 
-using namespace yaml;
-using namespace yaml::helper;
+using namespace parameters;
+using namespace parameters::formatter;
 
 #define ELRF(message) do { if (!is_batch_) std::cout << message << std::endl; return false; } while(0)
 
@@ -35,8 +37,8 @@ bool xml_formatter::format(const file_info& file_info, std::list<std::string>& x
 
 bool xml_formatter::get_file_xml(const file_info& fi, std::list<std::string>& xml)
 {
-	xml.push_back(string_helper::make_string("<Unit Name=\"", common::get_as_cp1251(file_info_.info.hint), "\" Id=\"",
-		common::get_as_cp1251(file_info_.info.id), "\">"));
+	xml.push_back(string_helper::make_string("<Unit Name=\"", helper::common::get_as_cp1251(file_info_.info.hint), "\" Id=\"",
+		helper::common::get_as_cp1251(file_info_.info.id), "\">"));
 
 	std::list<std::string> parameters_xml;
 	if (!get_parameters_xml(file_info_.parameters, parameters_xml))
@@ -64,18 +66,18 @@ bool xml_formatter::get_parameters_xml(const std::vector<parameter_info>& parame
 
 bool xml_formatter::get_parameter_xml(const parameter_info& pi, std::list<std::string>& xml)
 {
-	if (parameter::get_is_array(pi))
+	if (helper::parameter::get_is_array(pi))
 	{
 		int count = get_restricted_count_xml(pi);
 
-		if (parameter::get_category(file_info_, pi) == type_category::user_yml)
+		if (helper::parameter::get_category(file_info_, pi) == type_category::user_yml)
 		{
 			// Ёто вложенный тип данных, вызываем get_parameters_xml реккурсивно
-			xml.push_back(string_helper::make_string("<Array name=\"", common::get_as_cp1251(pi.name), "\">"));
+			xml.push_back(string_helper::make_string("<Array name=\"", helper::common::get_as_cp1251(pi.name), "\">"));
 
-			type_info* ti = type::get_type_info(file_info_, parameter::get_item_type(pi));
+			type_info* ti = helper::type::get_type_info(file_info_, helper::parameter::get_item_type(pi));
 			if (ti == nullptr)
-				ELRF("Get type failed, name = " << parameter::get_item_type(pi));
+				ELRF("Get type failed, name = " << helper::parameter::get_item_type(pi));
 
 			std::list<std::string> parameters_xml;
 			if (!get_parameters_xml(ti->parameters, parameters_xml))
@@ -94,8 +96,8 @@ bool xml_formatter::get_parameter_xml(const parameter_info& pi, std::list<std::s
 		else
 		{
 			// Ёто типизированный массив. “ип данных может быть стандартными или пользовательским типа cpp
-			xml.push_back(string_helper::make_string("<Array name=\"", common::get_as_cp1251(pi.name), "\" type=\"",
-				parameter::get_item_type_xml(file_info_, pi), "\">"));
+			xml.push_back(string_helper::make_string("<Array name=\"", helper::common::get_as_cp1251(pi.name), "\" type=\"",
+				helper::parameter::get_item_type_xml(file_info_, pi), "\">"));
 
 			for (int i = 0; i < count; i++)
 				xml.push_back(string_helper::make_string("\t<Item val=\"", get_restricted_value_xml(pi), "\"/>"));
@@ -105,12 +107,12 @@ bool xml_formatter::get_parameter_xml(const parameter_info& pi, std::list<std::s
 	}
 	else
 	{
-		if (parameter::get_item_type(pi) == "unit")
-			xml.push_back(string_helper::make_string("<Param name=\"", common::get_as_cp1251(pi.name), "\" type=\"",
-				parameter::get_item_type_xml(file_info_, pi), "\" val=\"", get_restricted_value_xml(pi), "\" depends=\"true\"/>"));
+		if (helper::parameter::get_item_type(pi) == "unit")
+			xml.push_back(string_helper::make_string("<Param name=\"", helper::common::get_as_cp1251(pi.name), "\" type=\"",
+				helper::parameter::get_item_type_xml(file_info_, pi), "\" val=\"", get_restricted_value_xml(pi), "\" depends=\"true\"/>"));
 		else
-			xml.push_back(string_helper::make_string("<Param name=\"", common::get_as_cp1251(pi.name), "\" type=\"",
-				parameter::get_item_type_xml(file_info_, pi), "\" val=\"", get_restricted_value_xml(pi), "\"/>"));
+			xml.push_back(string_helper::make_string("<Param name=\"", helper::common::get_as_cp1251(pi.name), "\" type=\"",
+				helper::parameter::get_item_type_xml(file_info_, pi), "\" val=\"", get_restricted_value_xml(pi), "\"/>"));
 	}
 
 	return true;
@@ -174,16 +176,16 @@ int xml_formatter::get_restricted_count_xml(const parameter_info& pi) const
 std::string xml_formatter::get_restricted_value_xml(const parameter_info& pi) const
 {
 	if (!pi.hint.empty())
-		return common::get_as_cp1251(pi.hint);
+		return helper::common::get_as_cp1251(pi.hint);
 	if (!pi.default_.empty())
-		return common::get_as_cp1251(pi.default_);
+		return helper::common::get_as_cp1251(pi.default_);
 	if (!pi.restrictions.min.empty())
-		return common::get_as_cp1251(pi.restrictions.min);
+		return helper::common::get_as_cp1251(pi.restrictions.min);
 	if (!pi.restrictions.max.empty())
-		return common::get_as_cp1251(pi.restrictions.max);
+		return helper::common::get_as_cp1251(pi.restrictions.max);
 	if (!pi.restrictions.set_.empty())
-		return common::get_as_cp1251(pi.restrictions.set_[0]);
-	const auto item_type_xml = parameter::get_item_type_xml(file_info_, pi);
+		return helper::common::get_as_cp1251(pi.restrictions.set_[0]);
+	const auto item_type_xml = helper::parameter::get_item_type_xml(file_info_, pi);
 	if (item_type_xml == "dbl")
 		return "0.0";
 	if (item_type_xml == "int")

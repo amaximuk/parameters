@@ -7,7 +7,8 @@
 #include "string_helper.h"
 #include "yaml_parser.h"
 
-using namespace yaml;
+using namespace parameters;
+using namespace parameters::yaml;
 
 #define ELRF(message) do { if (!is_batch_) std::cout << message << std::endl; return false; } while(0)
 
