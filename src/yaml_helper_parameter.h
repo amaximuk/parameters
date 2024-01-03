@@ -46,34 +46,43 @@ namespace yaml
                 d_ = d;
             }
 
-            explicit variant(bool b) :
+            explicit variant(bool b):
                 variant()
             {
                 t_ = base_types::bool_;
                 b_ = b;
             }
 
-            base_types get_type()
+            base_types get_type() const
             {
                 return t_;
             }
 
             template <typename T>
-            T get()
+            T get() const
             {
                 switch (t_)
                 {
-                case parameters::base_types::string:
-                    return static_cast<T>(s_);
-                case parameters::base_types::integer:
+                case yaml::base_types::string:
+                    return {}; // specialization
+                case yaml::base_types::integer:
                     return static_cast<T>(i_);
-                case parameters::base_types::floating:
+                case yaml::base_types::floating:
                     return static_cast<T>(d_);
-                case parameters::base_types::bool_:
+                case yaml::base_types::bool_:
                     return static_cast<T>(b_);
                 default:
                     return {};
                 }
+            }
+
+            template <>
+            std::string get<std::string>() const
+            {
+                if (t_ == yaml::base_types::string)
+                    return s_;
+                else
+                    return {};
             }
         };
 
