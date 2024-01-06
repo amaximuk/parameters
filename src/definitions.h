@@ -23,13 +23,16 @@ namespace parameters
 		"array<unit>", "array<path>", "array<string>", "array<library>",
 		"array<double>", "array<int>", "array<bool>", "array<std::string>", "array<float>", "array<int8_t>", "array<int16_t>",
 		"array<int32_t>", "array<int64_t>", "array<uint8_t>", "array<uint16_t>", "array<uint32_t>", "array<uint64_t>" };
-	const std::map<std::string, base_types> parameter_to_base_types = {
-		{"unit", base_types::string}, {"path", base_types::string}, {"string", base_types::string},
-		{"library", base_types::string}, {"std::string", base_types::string},
-		{"double", base_types::floating}, {"float", base_types::floating},
-		{"bool", base_types::bool_},
-		{"int", base_types::integer}, {"int8_t", base_types::integer}, {"int16_t", base_types::integer},
-		{"int32_t", base_types::integer}, {"int64_t", base_types::integer},
-		{"uint8_t", base_types::integer}, {"uint16_t", base_types::integer},
-		{"uint32_t", base_types::integer}, {"uint64_t", base_types::integer} };
+	const std::map<std::string, base_item_types> parameter_to_base_item_types = {
+		{"unit", base_item_types::string}, {"path", base_item_types::string}, {"string", base_item_types::string},
+		{"library", base_item_types::string}, {"std::string", base_item_types::string},
+		{"double", base_item_types::floating}, {"float", base_item_types::floating},
+		{"bool", base_item_types::boolean},
+		{"int", base_item_types::integer}, {"int8_t", base_item_types::integer}, {"int16_t", base_item_types::integer},
+		{"int32_t", base_item_types::integer}, {"int64_t", base_item_types::integer},
+		{"uint8_t", base_item_types::integer}, {"uint16_t", base_item_types::integer},
+		{"uint32_t", base_item_types::integer}, {"uint64_t", base_item_types::integer} };
+	const std::map<std::string, base_item_types> xml_to_base_item_types = {
+		{"dbl", base_item_types::floating}, {"int", base_item_types::integer}, {"bool", base_item_types::boolean},
+		{"str", base_item_types::string}, {"lib", base_item_types::string} };
 }

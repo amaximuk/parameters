@@ -228,14 +228,14 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 		else
 			hint = pi.hint;
 
-		if (hint == "" && (bt == base_types::enum_ || bt == base_types::integer || bt == base_types::floating))
+		if (hint == "" && (bt == base_types::user_cpp || bt == base_types::integer || bt == base_types::floating))
 		{
 			// try get initial from restrictions
 			if (pi.restrictions.set_.size() > 0)
 				hint = pi.restrictions.set_[0];
 			else if (pi.restrictions.min != "" && pi.restrictions.max != "")
 			{
-				if (bt == base_types::enum_)
+				if (bt == base_types::user_cpp)
 					hint = pi.restrictions.min;
 				else if (bt == base_types::integer)
 				{
@@ -262,7 +262,7 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 			}
 			else if (pi.restrictions.min != "")
 			{
-				if (bt == base_types::enum_)
+				if (bt == base_types::user_cpp)
 					hint = pi.restrictions.min;
 				else if (bt == base_types::integer)
 				{
@@ -281,7 +281,7 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 			}
 			else if (pi.restrictions.max != "")
 			{
-				if (bt == base_types::enum_)
+				if (bt == base_types::user_cpp)
 					hint = pi.restrictions.min;
 				else if (bt == base_types::integer)
 				{
@@ -305,7 +305,7 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 			std::string value = hint;
 			return variant(value);
 		}
-		else if (bt == base_types::bool_)
+		else if (bt == base_types::boolean)
 		{
 			bool value = false;
 			if (hint != "")
@@ -314,7 +314,7 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 				value = false;
 			return variant(value);
 		}
-		else if (bt == base_types::enum_)
+		else if (bt == base_types::user_cpp)
 		{
 			int value = 0;
 			// get index of hint value or 0 (index of first enum element)

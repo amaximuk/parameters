@@ -34,14 +34,34 @@ namespace parameters
             bool get_is_array_type(const std::string& name);
             
 			//
+            bool get_is_unit_type(const std::string& name);
+
+			//
 			std::string get_item_type(const std::string& name);
-            
+
 			//
 			base_types get_base_type(const std::string& name);
 			
 			//
-			bool get_is_inner_type(std::string name);
+			base_item_types get_base_item_type(const std::string& name);
+			
+			//
+			base_item_types get_xml_base_item_type(const std::string& name);
+            
+			//
+			bool get_is_inner_type(const std::string& name);
 
+			//
+			int get_min_for_integral_type(const std::string& name);
+
+			//
+			int get_max_for_integral_type(const std::string& name);
+
+			//
+			int get_min_for_floating_point_type(const std::string& name);
+
+			//
+			int get_max_for_floating_point_type(const std::string& name);
 		}
 	}
 }

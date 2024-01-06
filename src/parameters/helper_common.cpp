@@ -305,6 +305,11 @@ bool common::get_is_array_type(const std::string& name)
 	return is_array;
 }
 
+bool common::get_is_unit_type(const std::string& name)
+{
+	return name == "unit";
+}
+
 std::string common::get_item_type(const std::string& name)
 {
 	std::string item_type{ name };
@@ -318,20 +323,120 @@ std::string common::get_item_type(const std::string& name)
 base_types common::get_base_type(const std::string& name)
 {
 	if (get_is_array_type(name))
+	{
 		return base_types::array;
+	}
 	else if (common::get_is_inner_type(name))
 	{
-		const auto bt = parameter_to_base_types.find(name);
-		if (bt != parameter_to_base_types.cend())
-			return bt->second;
-		else
-			return base_types::none;
+		const auto bit = get_base_item_type(name);
+		switch (bit)
+		{
+		case base_item_types::string:
+			return base_types::string;
+		case base_item_types::integer:
+			return base_types::integer;
+		case base_item_types::floating:
+			return base_types::floating;
+		case base_item_types::boolean:
+			return base_types::boolean;
+		case base_item_types::none: // impossible, it's inner type
+		case base_item_types::user: // impossible, it's inner type
+		default:
+			return base_types::none; // impossible, it's inner type
+		}
 	}
-	else // enum, yaml must be array
-		return base_types::enum_;
+	else
+	{
+		// user_cpp (enum), yaml must be array
+		return base_types::user_cpp;
+	}
 }
 
-bool common::get_is_inner_type(std::string name)
+base_item_types common::get_base_item_type(const std::string& name)
+{
+	auto item_type = get_item_type(name);
+	if (common::get_is_inner_type(item_type))
+	{
+		const auto bit = parameter_to_base_item_types.find(name);
+		if (bit != parameter_to_base_item_types.cend())
+		{
+			return bit->second;
+		}
+		else
+		{
+			// Impossible, it's inner type
+			// To avoid warning C4715: not all control paths return a value
+			return base_item_types::none;
+		}
+	}
+	else
+	{
+		// user_cpp (enum) or user_yml
+		return base_item_types::user;
+	}
+}
+
+base_item_types common::get_xml_base_item_type(const std::string& name)
+{
+	// Xml types have no arrays
+	const auto bit = xml_to_base_item_types.find(name);
+	if (bit != xml_to_base_item_types.cend())
+	{
+		return bit->second;
+	}
+	else
+	{
+		return base_item_types::none;
+	}
+}
+
+bool common::get_is_inner_type(const std::string& name)
 {
 	return (std::find(parameter_types.cbegin(), parameter_types.cend(), name) != parameter_types.cend());
+}
+
+int common::get_min_for_integral_type(const std::string& name)
+{
+	if (name == "uint8_t" || name == "uint16_t" || name == "uint32_t" || name == "uint64_t")
+		return 0;
+	else if (name == "int" || name == "int32_t" || name == "int64_t")
+		return std::numeric_limits<int32_t>::min();
+	else if (name == "int8_t")
+		return std::numeric_limits<int8_t>::min();
+	else if (name == "int16_t")
+		return std::numeric_limits<int16_t>::min();
+	return std::numeric_limits<int32_t>::min();
+}
+
+int common::get_max_for_integral_type(const std::string& name)
+{
+	if (name == "int" || name == "int32_t" || name == "int64_t" || name == "uint32_t" || name == "uint64_t")
+		return std::numeric_limits<int32_t>::max();
+	else if (name == "int8_t")
+		return std::numeric_limits<int8_t>::max();
+	else if (name == "int16_t")
+		return std::numeric_limits<int16_t>::max();
+	else if (name == "uint8_t")
+		return std::numeric_limits<uint8_t>::max();
+	else if (name == "uint16_t")
+		return std::numeric_limits<uint16_t>::max();
+	return std::numeric_limits<int32_t>::max();
+}
+
+int common::get_min_for_floating_point_type(const std::string& name)
+{
+	if (name == "float")
+		return std::numeric_limits<float>::lowest();
+	else if (name == "double")
+		return std::numeric_limits<double>::lowest();
+	return std::numeric_limits<double>::lowest();
+}
+
+int common::get_max_for_floating_point_type(const std::string& name)
+{
+	if (name == "float")
+		return std::numeric_limits<float>::max();
+	else if (name == "double")
+		return std::numeric_limits<double>::max();
+	return std::numeric_limits<double>::max();
 }

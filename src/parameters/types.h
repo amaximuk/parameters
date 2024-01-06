@@ -31,9 +31,19 @@ namespace parameters
 		string,
 		integer,
 		floating,
-		bool_,
+		boolean,
 		array,
-		enum_
+		user_cpp // enum only, user_yml must be array
+	};
+
+	enum class base_item_types
+	{
+		none,
+		string,
+		integer,
+		floating,
+		boolean,
+		user // user_cpp or user_yml
 	};
 
 	struct restrictions_info
@@ -143,7 +153,7 @@ namespace parameters
 		explicit variant(bool b) :
 			variant()
 		{
-			t_ = base_types::bool_;
+			t_ = base_types::boolean;
 			b_ = b;
 		}
 
@@ -163,7 +173,7 @@ namespace parameters
 				return static_cast<T>(i_);
 			case parameters::base_types::floating:
 				return static_cast<T>(d_);
-			case parameters::base_types::bool_:
+			case parameters::base_types::boolean:
 				return static_cast<T>(b_);
 			default:
 				return {};
