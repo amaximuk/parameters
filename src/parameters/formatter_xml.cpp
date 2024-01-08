@@ -118,43 +118,8 @@ bool xml_formatter::get_parameter_xml(const parameter_info& pi, std::list<std::s
 	return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 int xml_formatter::get_restricted_count_xml(const parameter_info& pi) const
 {
-	if (!pi.restrictions.min_count.empty())
-	{
-		int min_count = atoi(pi.restrictions.min_count.c_str());
-		if (min_count == 0 && !pi.restrictions.min_count.empty())
-		{
-			int max_count = atoi(pi.restrictions.max_count.c_str());
-			if (max_count > 0)
-				return 1;
-			else
-				return 0;
-		}
-		else
-			return min_count;
-	}
-
-	if (!pi.restrictions.max_count.empty())
-	{
-		int max_count = atoi(pi.restrictions.max_count.c_str());
-		if (max_count > 0)
-			return 1;
-		else
-			return 0;
-	}
-
 	if (!pi.restrictions.set_count.empty())
 	{
 		int min_set_count = std::numeric_limits<int>::max();
@@ -169,6 +134,37 @@ int xml_formatter::get_restricted_count_xml(const parameter_info& pi) const
 		else
 			return 0;
 	}
+
+	if (!pi.restrictions.min_count.empty())
+	{
+		int min_count = atoi(pi.restrictions.min_count.c_str());
+		if (min_count == 0)
+		{
+			if (!pi.restrictions.max_count.empty())
+			{
+				int max_count = atoi(pi.restrictions.max_count.c_str());
+				if (max_count > 0)
+					return 1;
+				else
+					return 0;
+			}
+			else
+				return 1;
+		}
+		else
+			return min_count;
+	}
+
+	if (!pi.restrictions.max_count.empty())
+	{
+		int max_count = atoi(pi.restrictions.max_count.c_str());
+		if (max_count > 0)
+			return 1;
+		else
+			return 0;
+	}
+	else
+		return 1;
 
 	return 0;
 }
