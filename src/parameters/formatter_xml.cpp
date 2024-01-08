@@ -126,7 +126,7 @@ int xml_formatter::get_restricted_count_xml(const parameter_info& pi) const
 		for (const auto& s : pi.restrictions.set_count)
 		{
 			int set_count = atoi(s.c_str());
-			if (set_count != 0 && min_set_count < set_count)
+			if (set_count != 0 && min_set_count > set_count)
 				min_set_count = set_count;
 		}
 		if (min_set_count != std::numeric_limits<int>::max())
