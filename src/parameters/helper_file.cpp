@@ -252,7 +252,7 @@ bool file::compare(const file_info& fi1, const file_info& fi2, std::string& mess
 
 	for (const auto& p : fi1.parameters)
 	{
-		const auto ppi = parameter::get_parameter_info(fi2, p.type, p.name);
+		const auto ppi = parameter::get_parameter_info(fi2, type::main_type, p.name);
 		if (ppi == nullptr)
 		{
 			message = "В file_info.parameters не найден параметр " + p.name;
