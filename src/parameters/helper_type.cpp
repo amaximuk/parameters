@@ -167,6 +167,86 @@ namespace parameters
 			return true;
 		}
 
+		bool type::compare(const type_info& ti1, const type_info& ti2, std::string message)
+		{
+			message = "ok";
+
+			// Required members from yml
+			if (ti1.name != ti2.name)
+			{
+				message = "Поле type_info.name не совпадает";
+				return false;
+			}
+
+			// Optional members from yml
+			if (ti1.type != ti2.type)
+			{
+				message = "Поле type_info.type не совпадает";
+				return false;
+			}
+
+			if (ti1.description != ti2.description)
+			{
+				message = "Поле type_info.description не совпадает";
+				return false;
+			}
+
+			if (ti1.values.size() != ti2.values.size())
+			{
+				message = "Количество type_info.values не совпадает";
+				return false;
+			}
+
+			for (const auto& s : ti1.values)
+			{
+				const auto it = std::find_if(ti2.values.cbegin(), ti2.values.cend(),
+					[&s](const auto& v) { return (v.first == s.first && v.second == s.second); });
+
+				if (it == ti2.values.cend())
+				{
+					message = "В type_info.values не найден параметр " + s.first;
+					return false;
+				}
+			}
+
+			if (ti1.includes.size() != ti2.includes.size())
+			{
+				message = "Количество type_info.includes не совпадает";
+				return false;
+			}
+
+			for (const auto& s : ti1.includes)
+			{
+				const auto it = std::find(ti2.includes.cbegin(), ti2.includes.cend(), s);
+				if (it == ti2.includes.cend())
+				{
+					message = "В type_info.includes не найден параметр " + s;
+					return false;
+				}
+			}
+
+			if (ti1.parameters.size() != ti2.parameters.size())
+			{
+				message = "Количество type_info.parameters не совпадает";
+				return false;
+			}
+
+			for (const auto& p : ti1.parameters)
+			{
+				const auto ppi = parameter::get_parameter_info(ti2, p.name);
+				if (ppi == nullptr)
+				{
+					message = "В type_info.parameters не найден параметр " + p.name;
+					return false;
+				}
+
+				if (!parameter::compare(p, *ppi, message))
+					return false;
+			}
+
+			return true;
+		}
+
 		type_info* type::get_type_info(file_info& fi, const std::string& name)
 		{
 			const auto it = std::find_if(fi.types.cbegin(), fi.types.cend(),

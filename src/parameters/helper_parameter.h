@@ -55,6 +55,8 @@ namespace parameters
 			//
 			variant get_initial_value(const file_info& fi, const parameter_info& pi, bool is_item);
 
+			//
+			bool compare(const parameter_info& pi1, const parameter_info& pi2, std::string message);
 
 
 
@@ -74,8 +76,19 @@ namespace parameters
 			std::vector<parameter_info>* get_parameters(file_info& fi, const std::string& type);
 			
 			//
+			const std::vector<parameter_info>* get_parameters(const file_info& fi, const std::string& type);
+
+			//
 			parameter_info* get_parameter_info(file_info& fi, const std::string& type, const std::string& name);
 
+			//
+			const parameter_info* get_parameter_info(const file_info& fi, const std::string& type, const std::string& name);
+
+			//
+			parameter_info* get_parameter_info(type_info& ti, const std::string& name);
+
+			//
+			const parameter_info* get_parameter_info(const type_info& ti, const std::string& name);
 		}
 	}
 }

@@ -4,6 +4,8 @@
 #include "parameters/types.h"
 #include "parameters/helper_common.h"
 #include "parameters/helper_type.h"
+#include "parameters/helper_info.h"
+#include "parameters/helper_parameter.h"
 #include "parameters/helper_file.h"
 
 using namespace parameters;
@@ -177,7 +179,7 @@ bool file::rearrange_types(file_info& fi, bool& have_type_loop)
 	return true;
 }
 
-bool file::validate(file_info& fi, std::string& message)
+bool file::validate(const file_info& fi, std::string& message)
 {
 	message = "ok";
 
@@ -224,6 +226,60 @@ bool file::validate(file_info& fi, std::string& message)
 				return false;
 			}
 		}
+	}
+
+	return true;
+}
+
+bool file::compare(const file_info& fi1, const file_info& fi2, std::string& message)
+{
+	message = "ok";
+
+	if (fi1.format != fi2.format)
+	{
+		message = "Поле file_info.format не совпадает";
+		return false;
+	}
+
+	if (!info::compare(fi1.info, fi2.info, message))
+		return false;
+
+	if (fi1.parameters.size() != fi2.parameters.size())
+	{
+		message = "Количество file_info.parameters не совпадает";
+		return false;
+	}
+
+	for (const auto& p : fi1.parameters)
+	{
+		const auto ppi = parameter::get_parameter_info(fi2, p.type, p.name);
+		if (ppi == nullptr)
+		{
+			message = "В file_info.parameters не найден параметр " + p.name;
+			return false;
+		}
+
+		if (!parameter::compare(p, *ppi, message))
+			return false;
+	}
+
+	if (fi1.types.size() != fi2.types.size())
+	{
+		message = "Количество file_info.types не совпадает";
+		return false;
+	}
+
+	for (const auto& t : fi1.types)
+	{
+		const auto pti = type::get_type_info(fi2, t.name);
+		if (pti == nullptr)
+		{
+			message = "В file_info.types не найден тип " + t.name;
+			return false;
+		}
+
+		if (!type::compare(t, *pti, message))
+			return false;
 	}
 
 	return true;

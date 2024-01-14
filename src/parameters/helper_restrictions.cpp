@@ -127,3 +127,95 @@ bool restrictions::move_ids_value(file_info& fi, const std::string& type, const 
 		std::iter_swap(it, std::next(it, 1));
 	return true;
 }
+
+bool restrictions::compare(const restrictions_info& ri1, const restrictions_info& ri2, std::string message)
+{
+	message = "ok";
+
+	// Optional members from yml
+	if (ri1.min != ri2.min)
+	{
+		message = "Поле restrictions_info.min не совпадает";
+		return false;
+	}
+
+	if (ri1.max != ri2.max)
+	{
+		message = "Поле restrictions_info.max не совпадает";
+		return false;
+	}
+
+	if (ri1.set_.size() != ri2.set_.size())
+	{
+		message = "Количество restrictions_info.set_ не совпадает";
+		return false;
+	}
+
+	for (const auto& s : ri1.set_)
+	{
+		const auto it = std::find(ri2.set_.cbegin(), ri2.set_.cend(), s);
+		if (it == ri2.set_.cend())
+		{
+			message = "В restrictions_info.set_ не найден параметр " + s;
+			return false;
+		}
+	}
+
+	if (ri1.min_count != ri2.min_count)
+	{
+		message = "Поле restrictions_info.min_count не совпадает";
+		return false;
+	}
+
+	if (ri1.max_count != ri2.max_count)
+	{
+		message = "Поле restrictions_info.max_count не совпадает";
+		return false;
+	}
+
+	if (ri1.set_count.size() != ri2.set_count.size())
+	{
+		message = "Количество restrictions_info.set_count не совпадает";
+		return false;
+	}
+
+	for (const auto& s : ri1.set_count)
+	{
+		const auto it = std::find(ri2.set_count.cbegin(), ri2.set_count.cend(), s);
+		if (it == ri2.set_count.cend())
+		{
+			message = "В restrictions_info.set_count не найден параметр " + s;
+			return false;
+		}
+	}
+
+	if (ri1.category != ri2.category)
+	{
+		message = "Поле restrictions_info.category не совпадает";
+		return false;
+	}
+
+	if (ri1.ids.size() != ri2.ids.size())
+	{
+		message = "Количество restrictions_info.ids не совпадает";
+		return false;
+	}
+
+	for (const auto& s : ri1.ids)
+	{
+		const auto it = std::find(ri2.ids.cbegin(), ri2.ids.cend(), s);
+		if (it == ri2.ids.cend())
+		{
+			message = "В restrictions_info.ids не найден параметр " + s;
+			return false;
+		}
+	}
+
+	if (ri1.max_length != ri2.max_length)
+	{
+		message = "Поле restrictions_info.max_length не совпадает";
+		return false;
+	}
+
+	return true;
+}

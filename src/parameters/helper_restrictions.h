@@ -26,6 +26,8 @@ namespace parameters
 			bool remove_ids_value(file_info& fi, const std::string& type, const std::string& name, const std::string& value);
 			bool move_ids_value(file_info& fi, const std::string& type, const std::string& name, const std::string& value, const bool up);
 
+			//
+			bool compare(const restrictions_info& ri1, const restrictions_info& ri2, std::string message);
 		}
 	}
 }

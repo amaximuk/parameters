@@ -22,13 +22,21 @@ namespace parameters
 			
 			//
 			std::vector<std::string> get_user_types(const file_info& fi);
-
-
+			
+			//
 			bool set_type(file_info& fi, const std::string& type, const parameters::type_info& ti, bool exclude_parameters);
+			
+			//
 			bool rename_type(file_info& fi, const std::string& oldName, const std::string& newName);
+			
+			//
 			bool rearrange_types(file_info& fi, bool& have_type_loop);
-			bool validate(file_info& fi, std::string& message);
+			
+			//
+			bool validate(const file_info& fi, std::string& message);
 
+			//
+			bool compare(const file_info& fi1, const file_info& fi2, std::string& message);
 		}
 	}
 }

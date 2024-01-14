@@ -4,6 +4,7 @@
 #include "parameters/types.h"
 #include "parameters/helper_common.h"
 #include "parameters/helper_type.h"
+#include "parameters/helper_restrictions.h"
 #include "parameters/helper_parameter.h"
 
 using namespace parameters;
@@ -361,9 +362,78 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 	return {};
 }
 
+bool parameter::compare(const parameter_info& pi1, const parameter_info& pi2, std::string message)
+{
+	message = "ok";
+
+	// Required members from yml
+	if (pi1.type != pi2.type)
+	{
+		message = "Поле parameter_info.type не совпадает";
+		return false;
+	}
+
+	if (pi1.name != pi2.name)
+	{
+		message = "Поле parameter_info.name не совпадает";
+		return false;
+	}
+
+	// Optional members from yml
+	if (pi1.required != pi2.required)
+	{
+		message = "Поле parameter_info.required не совпадает";
+		return false;
+	}
+
+	if (pi1.default_ != pi2.default_)
+	{
+		message = "Поле parameter_info.default_ не совпадает";
+		return false;
+	}
+
+	if (pi1.display_name != pi2.display_name)
+	{
+		message = "Поле parameter_info.display_name не совпадает";
+		return false;
+	}
+
+	if (pi1.description != pi2.description)
+	{
+		message = "Поле parameter_info.description не совпадает";
+		return false;
+	}
+
+	if (pi1.hint != pi2.hint)
+	{
+		message = "Поле parameter_info.hint не совпадает";
+		return false;
+	}
+
+	if (!restrictions::compare(pi1.restrictions, pi2.restrictions, message))
+		return false;
+
+	return true;
+}
+
 std::vector<parameter_info>* parameter::get_parameters(file_info& fi, const std::string& type)
 {
 	std::vector<parameter_info>* pvect = nullptr;
+	if (type == type::main_type)
+	{
+		pvect = &fi.parameters;
+	}
+	else
+	{
+		auto pti = type::get_type_info(fi, type);
+		if (pti) pvect = &pti->parameters;
+	}
+	return pvect;
+}
+
+const std::vector<parameter_info>* parameter::get_parameters(const file_info& fi, const std::string& type)
+{
+	const std::vector<parameter_info>* pvect = nullptr;
 	if (type == type::main_type)
 	{
 		pvect = &fi.parameters;
@@ -382,9 +452,40 @@ parameter_info* parameter::get_parameter_info(file_info& fi, const std::string& 
 	auto pvect = get_parameters(fi, type);
 	if (pvect)
 	{
-		auto it = std::find_if(pvect->begin(), pvect->end(), [name](const auto& pi) { return pi.name == name; });
+		auto it = std::find_if(pvect->begin(), pvect->end(), [&name](const auto& pi) { return pi.name == name; });
 		if (it != pvect->end())
 			ppi = &(*it);
 	}
+	return ppi;
+}
+
+const parameter_info* parameter::get_parameter_info(const file_info& fi, const std::string& type, const std::string& name)
+{
+	const parameter_info* ppi = nullptr;
+	auto pvect = get_parameters(fi, type);
+	if (pvect)
+	{
+		auto it = std::find_if(pvect->begin(), pvect->end(), [&name](const auto& pi) { return pi.name == name; });
+		if (it != pvect->end())
+			ppi = &(*it);
+	}
+	return ppi;
+}
+
+parameter_info* parameter::get_parameter_info(type_info& ti, const std::string& name)
+{
+	parameter_info* ppi = nullptr;
+	auto it = std::find_if(ti.parameters.begin(), ti.parameters.end(), [&name](const auto& pi) { return pi.name == name; });
+	if (it != ti.parameters.end())
+		ppi = &(*it);
+	return ppi;
+}
+
+const parameter_info* parameter::get_parameter_info(const type_info& ti, const std::string& name)
+{
+	const parameter_info* ppi = nullptr;
+	auto it = std::find_if(ti.parameters.begin(), ti.parameters.end(), [&name](const auto& pi) { return pi.name == name; });
+	if (it != ti.parameters.end())
+		ppi = &(*it);
 	return ppi;
 }

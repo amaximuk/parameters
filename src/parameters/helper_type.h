@@ -42,7 +42,8 @@ namespace parameters
 			bool remove_include(file_info& fi, const std::string& type, const std::string& name);
 			bool move_include(file_info& fi, const std::string& type, const std::string& name, const bool up);
 
-
+			//
+			bool compare(const type_info& ti1, const type_info& ti2, std::string message);
 
 
 
