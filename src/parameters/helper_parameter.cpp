@@ -317,27 +317,45 @@ variant parameter::get_initial_value(const file_info& fi, const parameter_info& 
 		}
 		else if (bt == base_types::user_cpp)
 		{
-			int value = 0;
-			// get index of hint value or 0 (index of first enum element)
+			// It's enum, return value, not index
+			std::string value;
 			const parameters::type_info* ti = type::get_type_info(fi, pi.type);
 			if (ti != nullptr && ti->type == "enum" && ti->values.size() > 0)
 			{
 				if (hint == "")
-					value = 0;
+					value = ti->values[0].first;
 				else
 				{
-					value = 0;
-
-					//auto it = std::find_if(ti->values.cbegin(), ti->values.cend(), [hint](const auto& v) { return v.first == hint; });
-					//if (it != ti->values.cend())
-					//    value = static_cast<int>(std::distance(ti->values.cbegin(), it));
-					//else
-					//    value = 0;
+					auto it = std::find_if(ti->values.cbegin(), ti->values.cend(), [hint](const auto& v) { return v.first == hint; });
+					if (it != ti->values.cend())
+					    value = hint;
+					else
+					    value = ti->values[0].first;
 				}
 			}
-			else
-				value = 0;
 			return variant(value);
+
+			//int value = 0;
+			//// get index of hint value or 0 (index of first enum element)
+			//const parameters::type_info* ti = type::get_type_info(fi, pi.type);
+			//if (ti != nullptr && ti->type == "enum" && ti->values.size() > 0)
+			//{
+			//	if (hint == "")
+			//		value = 0;
+			//	else
+			//	{
+			//		value = 0;
+
+			//		//auto it = std::find_if(ti->values.cbegin(), ti->values.cend(), [hint](const auto& v) { return v.first == hint; });
+			//		//if (it != ti->values.cend())
+			//		//    value = static_cast<int>(std::distance(ti->values.cbegin(), it));
+			//		//else
+			//		//    value = 0;
+			//	}
+			//}
+			//else
+			//	value = 0;
+			//return variant(value);
 		}
 		else if (bt == base_types::integer)
 		{
