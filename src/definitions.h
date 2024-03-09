@@ -8,6 +8,14 @@
 
 namespace parameters
 {
+	const std::map<type_types, std::string> type_type_strings = { {type_types::yml, "yml"}, {type_types::enum_, "enum"} };
+	const std::map<system_types, std::string> system_type_strings = { {system_types::unit, "unit"}, {system_types::path, "path"},
+		{system_types::string, "string"}, {system_types::library, "library"} };
+	const std::map<cpp_types, std::string> cpp_type_strings = { {cpp_types::double_, "dbl"}, {cpp_types::int_, "int"},
+		{cpp_types::bool_, "bool"}, {cpp_types::std_string, "str"}, {cpp_types::float_, "dbl"}, {cpp_types::int8_t, "int"},
+		{cpp_types::int16_t, "int"}, {cpp_types::int32_t, "int"}, {cpp_types::int64_t, "int"}, {cpp_types::uint8_t, "int"},
+		{cpp_types::uint16_t, "int"}, {cpp_types::uint32_t, "int"}, {cpp_types::uint64_t, "int"} };
+	
 	const std::map<std::string, std::string> type_to_xml_types = { {"yml", ""}, {"enum", "str"} };
 	const std::map<std::string, std::string> system_to_xml_types = { {"unit", "str"}, {"path", "str"}, {"string", "str"}, {"library", "lib"} };
 	const std::map<std::string, std::string> cpp_to_xml_types = { {"double", "dbl"}, {"int", "int"}, {"bool", "bool"}, {"std::string", "str"},
@@ -16,8 +24,8 @@ namespace parameters
 	const std::map<std::string, std::string> xml_to_cpp_types = { {"dbl", "double"}, {"int", "int"}, {"bool", "bool"}, {"str", "std::string"},
 		{"lib", "std::string"} };
 
-	const std::vector<std::string> type_types = { "yml", "enum" };
-	const std::vector<std::string> parameter_types = { "unit", "path", "string", "library",
+	const std::vector<std::string> type_types_as_string = { "yml", "enum" };
+	const std::vector<std::string> parameter_types_as_string = { "unit", "path", "string", "library",
 		"double", "int", "bool", "std::string", "float", "int8_t", "int16_t",
 		"int32_t", "int64_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t",
 		"array<unit>", "array<path>", "array<string>", "array<library>",

@@ -18,8 +18,17 @@ namespace parameters
 				wiki
 			};
 
+			// ѕолучить строковое представление константы
+			std::string get_type_type_as_string(const type_types value);
+
+			// ѕолучить строковое представление константы
+			std::string get_system_type_as_string(const system_types value);
+
+			// ѕолучить строковое представление константы
+			std::string get_cpp_type_as_string(const cpp_types value);
+
 			// ѕреобразовать кодировку строки из utf-8 в 1251
-			std::string get_as_cp1251(const std::string value);
+			std::string get_as_cp1251(const std::string& value);
 
 			// ѕреобразовать строку описани€ (юнита, параметра или типа) к одному из вариантов description_type
 			std::string get_description_as_cp1251(const std::string& description, const description_type type);

@@ -12,7 +12,31 @@
 using namespace parameters;
 using namespace parameters::helper;
 
-std::string common::get_as_cp1251(const std::string value)
+std::string common::get_type_type_as_string(const type_types value)
+{
+	const auto it = type_type_strings.find(value);
+	if (it != type_type_strings.end())
+		return it->second;
+	return "";
+}
+
+std::string common::get_system_type_as_string(const system_types value)
+{
+	const auto it = system_type_strings.find(value);
+	if (it != system_type_strings.end())
+		return it->second;
+	return "";
+}
+
+std::string common::get_cpp_type_as_string(const cpp_types value)
+{
+	const auto it = cpp_type_strings.find(value);
+	if (it != cpp_type_strings.end())
+		return it->second;
+	return "";
+}
+
+std::string common::get_as_cp1251(const std::string& value)
 {
 	return EncodingCP1251::utf8_to_cp1251(value);
 }
@@ -392,7 +416,7 @@ base_item_types common::get_xml_base_item_type(const std::string& name)
 
 bool common::get_is_inner_type(const std::string& name)
 {
-	return (std::find(parameter_types.cbegin(), parameter_types.cend(), name) != parameter_types.cend());
+	return (std::find(parameter_types_as_string.cbegin(), parameter_types_as_string.cend(), name) != parameter_types_as_string.cend());
 }
 
 int common::get_min_for_integral_type(const std::string& name)

@@ -25,7 +25,7 @@ std::string file::get_display_name(const file_info& fi)
 
 std::vector<std::string> file::get_type_types()
 {
-	return type_types;
+	return type_types_as_string;
 }
 
 std::vector<std::string> file::get_parameter_types(const file_info& fi)
@@ -38,7 +38,7 @@ std::vector<std::string> file::get_parameter_types(const file_info& fi)
 			result.push_back(v.name);
 		result.push_back("array<" + v.name + ">");
 	}
-	result.insert(result.end(), parameter_types.cbegin(), parameter_types.cend());
+	result.insert(result.end(), parameter_types_as_string.cbegin(), parameter_types_as_string.cend());
 	return result;
 }
 

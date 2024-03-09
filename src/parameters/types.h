@@ -46,6 +46,46 @@ namespace parameters
 		user // user_cpp or user_yml
 	};
 
+	enum class type_types
+	{
+		yml,
+		enum_
+	};
+
+	enum class system_types
+	{
+		unit,
+		path,
+		string,
+		library
+	};
+
+	//enum class parameter_types
+	//{
+	//	unit, path, string, library,
+	//	double_, int_, bool_, std_string, float_, int8_t, int16_t,
+	//	int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t,
+	//	array_unit, array_path, array_string, array_library,
+	//	array_double, array_int, array_bool, array_std_string, array_float, array_int8_t, array_int16_t,
+	//	array_int32_t, array_int64_t, array_uint8_t, array_uint16_t, array_uint32_t, array_uint64_t
+	//};
+
+	enum class cpp_types
+	{
+		double_, int_, bool_, std_string, float_,
+		int8_t, int16_t, int32_t, int64_t,
+		uint8_t, uint16_t, uint32_t, uint64_t
+	};
+
+	enum class xml_types
+	{
+		dbl,
+		int_,
+		bool_,
+		str,
+		lib
+	};
+
 	struct restrictions_info
 	{
 		// Optional members from yml
