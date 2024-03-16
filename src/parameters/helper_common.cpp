@@ -381,7 +381,7 @@ base_item_types common::get_base_item_type(const std::string& name)
 	auto item_type = get_item_type(name);
 	if (common::get_is_inner_type(item_type))
 	{
-		const auto bit = parameter_to_base_item_types.find(name);
+		const auto bit = parameter_to_base_item_types.find(item_type);
 		if (bit != parameter_to_base_item_types.cend())
 		{
 			return bit->second;
