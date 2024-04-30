@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "definitions.h"
 #include "parameters/types.h"
 #include "parameters/helper_parameter.h"
