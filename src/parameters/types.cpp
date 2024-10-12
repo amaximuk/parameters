@@ -178,7 +178,7 @@ namespace yaml
 
 	std::string parameter_info::get_name_text() const
 	{
-		std::string name_text = yml.name;
+		std::string name_text = yml.originalName;
 		std::transform(name_text.begin(), name_text.end(), name_text.begin(),
 			[](unsigned char c) { return std::tolower(c); });
 		return name_text;
@@ -211,7 +211,7 @@ namespace yaml
 
 	std::string parameter_info::get_count_xml_name_text() const
 	{
-		return yml.name + "__CNT";
+		return yml.originalName + "__CNT";
 	}
 
 	std::string parameter_info::get_value_set_name_text() const
@@ -253,7 +253,7 @@ namespace yaml
 
 	std::string type_info::get_convert_function_name_text() const
 	{
-		std::string function_name = yml.name;
+		std::string function_name = yml.originalName;
 		std::transform(function_name.begin(), function_name.end(), function_name.begin(),
 			[](unsigned char c) { return std::tolower(c); });
 		function_name = std::regex_replace(function_name, std::regex("::"), "_");
@@ -306,11 +306,11 @@ namespace yaml
 
 
 	// file_info
-	bool file_info::get_type(const std::string& name, type_info& type) const
+	bool file_info::get_type(const std::string& originalName, type_info& type) const
 	{
 		for (const auto& ti : types)
 		{
-			if (ti.yml.name == name)
+			if (ti.yml.originalName == originalName)
 			{
 				type = ti;
 				return true;
